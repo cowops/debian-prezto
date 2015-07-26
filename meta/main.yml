@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: loranger
+  description: Install Prezto for debian system
+  license: BSD
+  min_ansible_version: 1.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - jessie
+    - squeeze
+    - wheezy
+  categories:
+  - system
