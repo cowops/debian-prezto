@@ -14,7 +14,8 @@
 
 - name: install prezto
   shell: /tmp/install_prezto.sh
-  sudo_user: "{{ item }}"
+  become: yes
+  become_user: "{{ item }}"
   with_items: "{{ prezto_users }}"
 
 - name: set cloud prompt theme
