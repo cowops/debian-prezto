@@ -1,2 +1,4 @@
-prezto_users:
-  - vagrant
+prezto:
+  prompt: cloud
+  users:
+    - vagrant

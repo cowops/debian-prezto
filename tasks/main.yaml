@@ -10,14 +10,14 @@
 
 - name: use zsh shell for users
   user: name={{ item }} shell='/usr/bin/zsh'
-  with_items: "{{ prezto_users }}"
+  with_items: "{{ prezto.users }}"
 
 - name: install prezto
   shell: /tmp/install_prezto.sh
   become: yes
   become_user: "{{ item }}"
-  with_items: "{{ prezto_users }}"
+  with_items: "{{ prezto.users }}"
 
-- name: set cloud prompt theme
-  lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme 'cloud' '☁️'"
-  with_items: "{{ prezto_users }}"
+- name: set prezto prompt theme
+  lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme '{{ prezto.prompt }}'"
+  with_items: "{{ prezto.users }}"
