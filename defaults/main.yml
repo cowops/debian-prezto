@@ -1,4 +1,4 @@
 prezto:
-  prompt: cloud
+  prompt: "'cloud'"
   users:
     - vagrant

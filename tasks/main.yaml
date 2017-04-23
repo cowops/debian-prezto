@@ -19,5 +19,5 @@
   with_items: "{{ prezto.users }}"
 
 - name: set prezto prompt theme
-  lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme '{{ prezto.prompt }}'"
+  lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ prezto.prompt }}"
   with_items: "{{ prezto.users }}"
