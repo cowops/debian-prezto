@@ -17,6 +17,9 @@
   become: yes
   become_user: "{{ item }}"
   with_items: "{{ prezto.users }}"
+  register: install_prezto_result
+  changed_when: "not install_prezto_result.stdout|search('Already up-to-date.')"
+
 
 - name: set prezto prompt theme
   lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ prezto.prompt }}"
