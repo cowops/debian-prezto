@@ -1,4 +1,5 @@
-prezto:
-  prompt: "'cloud'"
-  users:
-    - vagrant
+debian.users:
+
+  - name : bob
+    prezto:
+      prompt: "'cloud'"
