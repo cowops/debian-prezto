@@ -1,26 +1,30 @@
 ---
 - name: install git & zsh
-  apt: pkg={{ item }} state=present
-  with_items:
-    - git
-    - zsh
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - git
+      - zsh
 
 - name: get prezto installer
   get_url: url=https://github.com/loranger/prezto/raw/master/go.sh dest=/tmp/install_prezto.sh mode="a+x"
 
 - name: use zsh shell for users
-  user: name={{ item }} shell='/usr/bin/zsh'
-  with_items: "{{ prezto.users }}"
+  user: name={{ item.name }} shell='/usr/bin/zsh'
+  when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
+  with_items: "{{ debian.users }}"
 
 - name: install prezto
   shell: /tmp/install_prezto.sh
   become: yes
-  become_user: "{{ item }}"
-  with_items: "{{ prezto.users }}"
-  register: install_prezto_result
+  become_user: "{{ item.name }}"
+  when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
+  with_items: "{{ debian.users }}"
   changed_when: "not install_prezto_result.stdout|search('Already up-to-date.')"
 
-
 - name: set prezto prompt theme
-  lineinfile: dest=/home/{{ item }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ prezto.prompt }}"
-  with_items: "{{ prezto.users }}"
+  lineinfile: dest=/home/{{ item.name }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ item.prezto.prompt }}"
+  when: item.prezto is defined and item.prezto.prompt is defined and item.remove is undefined or item.remove|bool == False
+  with_items: "{{ debian.users }}"

@@ -19,14 +19,14 @@ prezto:
 Dependencies
 ------------
 
-None
+- cowops.debian_users
 
 Example Playbook
 ----------------
 
     - hosts: servers
       roles:
-         - { role: loranger.debian-prezto, prezto.users: vagrant }
+         - { role: cowops.debian-prezto, debian.users: vagrant }
 
 Tasks
 -----
