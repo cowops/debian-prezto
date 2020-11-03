@@ -22,6 +22,7 @@
   become_user: "{{ item.name }}"
   when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
   with_items: "{{ debian.users }}"
+  changed_when: "not install_prezto_result.stdout|search('Already up-to-date.')"
 
 - name: set prezto prompt theme
   lineinfile: dest=/home/{{ item.name }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ item.prezto.prompt }}"
