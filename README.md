@@ -31,7 +31,7 @@ Example Playbook
 Tasks
 -----
 
-  - Install [prezto](https://github.com/loranger/prezto) with a cloud prompt for all {{ prezto.users }}
+  - Install [prezto](https://github.com/sorin-ionescu/prezto) with a cloud prompt for all {{ prezto.users }}
 
 License
 -------

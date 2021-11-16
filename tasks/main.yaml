@@ -8,22 +8,34 @@
       - git
       - zsh
 
-- name: get prezto installer
-  get_url: url=https://github.com/loranger/prezto/raw/master/go.sh dest=/tmp/install_prezto.sh mode="a+x"
+- name: get prezto repository
+  ansible.builtin.git:
+    repo: 'https://github.com/sorin-ionescu/prezto.git'
+    dest: ~/.zprezto
+    recursive: true
+  become: yes
+  become_user: "{{ item.name }}"
+  with_items: "{{ debian.users }}"
+
+- name: link prezto runcoms
+  ansible.builtin.file:
+    src: "~/.zprezto/runcoms/{{ item[1] }}"
+    dest: "~/.{{ item[1] }}"
+    owner: "{{ item[0].name }}"
+    state: link
+  become: yes
+  become_user: "{{ item[0].name }}"
+  when: item[0].prezto is defined and item[0].remove is undefined or item[0].remove|bool == False
+  with_nested:
+    - "{{ debian.users }}"
+    - ['zlogin', 'zlogout', 'zpreztorc', 'zprofile', 'zshenv', 'zshrc']
+  vars:
+    allow_world_readable_tmpfiles: true
 
 - name: use zsh shell for users
   user: name={{ item.name }} shell='/usr/bin/zsh'
   when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
   with_items: "{{ debian.users }}"
-
-- name: install prezto
-  shell: /tmp/install_prezto.sh
-  become: yes
-  become_user: "{{ item.name }}"
-  register: install_prezto_result
-  when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
-  with_items: "{{ debian.users }}"
-  changed_when: "'Already up-to-date.' not in install_prezto_result.stdout"
 
 - name: set prezto prompt theme
   lineinfile: dest=/home/{{ item.name }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ item.prezto.prompt }}"
