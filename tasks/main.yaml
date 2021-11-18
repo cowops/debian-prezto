@@ -13,8 +13,10 @@
     repo: 'https://github.com/sorin-ionescu/prezto.git'
     dest: ~/.zprezto
     recursive: true
+    update: yes
   become: yes
   become_user: "{{ item.name }}"
+  ignore_errors: yes
   with_items: "{{ debian.users }}"
 
 - name: link prezto runcoms
