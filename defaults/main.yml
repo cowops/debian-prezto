@@ -1,4 +1,4 @@
-debian.users:
+system.users:
 
   - name : bob
     prezto:

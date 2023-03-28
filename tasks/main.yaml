@@ -17,7 +17,7 @@
   become: yes
   become_user: "{{ item.name }}"
   ignore_errors: yes
-  with_items: "{{ debian.users }}"
+  with_items: "{{ system.users }}"
 
 - name: link prezto runcoms
   ansible.builtin.file:
@@ -27,19 +27,19 @@
     state: link
   become: yes
   become_user: "{{ item[0].name }}"
-  when: item[0].prezto is defined and item[0].remove is undefined or item[0].remove|bool == False
+  when: item[0].prezto is defined and (item[0].remove is undefined or item[0].remove|bool == False)
   with_nested:
-    - "{{ debian.users }}"
+    - "{{ system.users }}"
     - ['zlogin', 'zlogout', 'zpreztorc', 'zprofile', 'zshenv', 'zshrc']
   vars:
     allow_world_readable_tmpfiles: true
 
 - name: use zsh shell for users
   user: name={{ item.name }} shell='/usr/bin/zsh'
-  when: item.prezto is defined and item.remove is undefined or item.remove|bool == False
-  with_items: "{{ debian.users }}"
+  when: item.prezto is defined and (item.remove is undefined or item.remove|bool == False)
+  with_items: "{{ system.users }}"
 
 - name: set prezto prompt theme
   lineinfile: dest=/home/{{ item.name }}/.zprezto/runcoms/zpreztorc regexp="prezto:module:prompt" line="zstyle ':prezto:module:prompt' theme {{ item.prezto.prompt }}"
-  when: item.prezto is defined and item.prezto.prompt is defined and item.remove is undefined or item.remove|bool == False
-  with_items: "{{ debian.users }}"
+  when: item.prezto is defined and item.prezto.prompt is defined and (item.remove is undefined or item.remove|bool == False)
+  with_items: "{{ system.users }}"

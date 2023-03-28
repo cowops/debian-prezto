@@ -26,7 +26,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: cowops.debian-prezto, debian.users: vagrant }
+         - { role: cowops.debian-prezto, system.users: vagrant }
 
 Tasks
 -----
